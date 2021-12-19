@@ -5,10 +5,8 @@ plugins {
     id('com.github.johnrengelman.shadow').version('7.1.0')
 }
 
-group = 'dev.minn'
-version = '1.0.0'
-
-description = """emoji-java"""
+group = 'com.github.minndevelopment'
+version = '6.0.0'
 
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 
@@ -16,9 +14,25 @@ tasks.withType(JavaCompile) {
 	options.encoding = 'UTF-8'
 }
 
+tasks.withType(Javadoc) {
+    failOnError = false
+    options.encoding = "UTF-8"
+    options.memberLevel = JavadocMemberLevel.PUBLIC
+
+    options.links(
+        "https://docs.oracle.com/en/java/javase/11/docs/api/",
+        "https://square.github.io/okhttp/3.x/okhttp/"
+    )
+    if (JavaVersion.current().isJava9Compatible())
+        options.addBooleanOption("html5", true)
+    if (JavaVersion.current().isJava11Compatible())
+        options.addBooleanOption("-no-module-directories", true)
+}
+
 repositories {
      mavenCentral()
 }
+
 dependencies {
     compileOnly group: 'org.jetbrains', name: 'annotations', version: '23.0.0'
     implementation group: 'org.json', name: 'json', version:'20211205'
