@@ -1,7 +1,5 @@
 # emoji-java
 
-[![Build Status](https://travis-ci.org/vdurmont/emoji-java.svg?branch=master)](https://travis-ci.org/vdurmont/emoji-java)
-[![Coverage Status](https://img.shields.io/coveralls/vdurmont/emoji-java.svg)](https://coveralls.io/r/vdurmont/emoji-java?branch=master)
 [![License Info](http://img.shields.io/badge/license-The%20MIT%20License-brightgreen.svg)](https://github.com/vdurmont/emoji-java/blob/master/LICENSE.md)
 
 _The missing emoji library for java._
@@ -14,18 +12,18 @@ _The missing emoji library for java._
 
 ```xml
 <dependency>
-  <groupId>com.vdurmont</groupId>
+  <groupId>com.github.minndevelopment</groupId>
   <artifactId>emoji-java</artifactId>
-  <version>5.1.1</version>
+  <version>master-SNAPSHOT</version>
 </dependency>
 ```
 
-You can also download the project, build it with `mvn clean install` and add the generated jar to your buildpath.
+You can also download the project, build it with `./gradlew shadowJar` and add the generated jar to your buildpath.
 
 ##### Via Gradle:
 
 ```gradle
-compile 'com.vdurmont:emoji-java:5.1.1'
+compile 'com.github.minndevelopment:emoji-java:master-SNAPSHOT'
 ```
 
 ##### Via Direct Download:
