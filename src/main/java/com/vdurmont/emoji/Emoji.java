@@ -243,8 +243,8 @@ public class Emoji {
      * tags=[happy, joy, pleased],
      * category='Smileys & Emotion',
      * unicode='😄',
-     * htmlDec='&amp;#128516;',
-     * htmlHex='&amp;#x1f604;'
+     * htmlDec='&#128516;',
+     * htmlHex='&#x1f604;'
      * }}</pre>
      *
      * @return the string representation

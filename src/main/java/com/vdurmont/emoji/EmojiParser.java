@@ -107,7 +107,7 @@ public class EmojiParser {
      *
      * <h2>Examples</h2>
      * {@code :smile:} will be replaced by {@code 😄}<br>
-     * {@code &amp;#128516;} will be replaced by {@code 😄}<br>
+     * {@code &#128516;} will be replaced by {@code 😄}<br>
      * {@code :boy|type_6:} will be replaced by {@code 👦🏿}
      *
      * @param  input
@@ -218,15 +218,15 @@ public class EmojiParser {
 
     /**
      * Replaces the emoji's unicode occurrences by their html representation.
-     * <br>Example: {@code 😄} will be replaced by {@code &amp;#128516;}
+     * <br>Example: {@code 😄} will be replaced by {@code &#128516;}
      *
      * <p>When a fitzpatrick modifier is present with a PARSE or REMOVE action, the
      * modifier will be deleted from the string.
-     * <br>Example: {@code 👦🏿} will be replaced by {@code &amp;#128102;}
+     * <br>Example: {@code 👦🏿} will be replaced by {@code &#128102;}
      *
      * <p>When a fitzpatrick modifier is present with a IGNORE action, the modifier
      * will be ignored and will remain in the string.
-     * <br>Example: {@code 👦🏿} will be replaced by {@code &amp;#128102;🏿}
+     * <br>Example: {@code 👦🏿} will be replaced by {@code &#128102;🏿}
      *
      * @param  input
      *         the string to parse
@@ -271,15 +271,15 @@ public class EmojiParser {
     /**
      * Replaces the emoji's unicode occurrences by their html hex
      * representation.
-     * <br>Example: {@code 👦} will be replaced by {@code &amp;#x1f466;}
+     * <br>Example: {@code 👦} will be replaced by {@code &#x1f466;}
      *
      * <p>When a fitzpatrick modifier is present with a PARSE or REMOVE action, the
      * modifier will be deleted.
-     * <br>Example: {@code 👦🏿} will be replaced by {@code &amp;#x1f466;}
+     * <br>Example: {@code 👦🏿} will be replaced by {@code &#x1f466;}
      *
      * <p>When a fitzpatrick modifier is present with a IGNORE action, the modifier
      * will be ignored and will remain in the string.
-     * <br>Example: {@code 👦🏿} will be replaced by {@code &amp;#x1f466;🏿}
+     * <br>Example: {@code 👦🏿} will be replaced by {@code &#x1f466;🏿}
      *
      * @param  input
      *         the string to parse
