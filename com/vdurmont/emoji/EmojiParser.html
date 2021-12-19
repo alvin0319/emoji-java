@@ -442,7 +442,7 @@ public static&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/d
 
  <h2>Examples</h2>
  <code>:smile:</code> will be replaced by <code>😄</code><br>
- <code>&amp;amp;#128516;</code> will be replaced by <code>😄</code><br>
+ <code>&amp;#128516;</code> will be replaced by <code>😄</code><br>
  <code>:boy|type_6:</code> will be replaced by <code>👦🏿</code></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -480,15 +480,15 @@ public static&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/d
 public static&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;parseToHtmlDecimal&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;input,
                                                  <a href="EmojiParser.FitzpatrickAction.html" title="enum in com.vdurmont.emoji">EmojiParser.FitzpatrickAction</a>&nbsp;fitzpatrickAction)</pre>
 <div class="block">Replaces the emoji's unicode occurrences by their html representation.
- <br>Example: <code>😄</code> will be replaced by <code>&amp;amp;#128516;</code>
+ <br>Example: <code>😄</code> will be replaced by <code>&amp;#128516;</code>
 
  <p>When a fitzpatrick modifier is present with a PARSE or REMOVE action, the
  modifier will be deleted from the string.
- <br>Example: <code>👦🏿</code> will be replaced by <code>&amp;amp;#128102;</code>
+ <br>Example: <code>👦🏿</code> will be replaced by <code>&amp;#128102;</code>
 
  <p>When a fitzpatrick modifier is present with a IGNORE action, the modifier
  will be ignored and will remain in the string.
- <br>Example: <code>👦🏿</code> will be replaced by <code>&amp;amp;#128102;🏿</code></div>
+ <br>Example: <code>👦🏿</code> will be replaced by <code>&amp;#128102;🏿</code></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>input</code> - the string to parse</dd>
@@ -529,15 +529,15 @@ public static&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/d
                                                      @NotNull <a href="EmojiParser.FitzpatrickAction.html" title="enum in com.vdurmont.emoji">EmojiParser.FitzpatrickAction</a>&nbsp;fitzpatrickAction)</pre>
 <div class="block">Replaces the emoji's unicode occurrences by their html hex
  representation.
- <br>Example: <code>👦</code> will be replaced by <code>&amp;amp;#x1f466;</code>
+ <br>Example: <code>👦</code> will be replaced by <code>&amp;#x1f466;</code>
 
  <p>When a fitzpatrick modifier is present with a PARSE or REMOVE action, the
  modifier will be deleted.
- <br>Example: <code>👦🏿</code> will be replaced by <code>&amp;amp;#x1f466;</code>
+ <br>Example: <code>👦🏿</code> will be replaced by <code>&amp;#x1f466;</code>
 
  <p>When a fitzpatrick modifier is present with a IGNORE action, the modifier
  will be ignored and will remain in the string.
- <br>Example: <code>👦🏿</code> will be replaced by <code>&amp;amp;#x1f466;🏿</code></div>
+ <br>Example: <code>👦🏿</code> will be replaced by <code>&amp;#x1f466;🏿</code></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>input</code> - the string to parse</dd>
