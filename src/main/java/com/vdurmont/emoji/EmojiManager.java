@@ -2,6 +2,7 @@ package com.vdurmont.emoji;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.util.*;
 
 /**
@@ -11,39 +12,35 @@ import java.util.*;
  */
 public class EmojiManager {
     static final EmojiTrie EMOJI_TRIE;
-    private static final String PATH = "/emojis.json";
-    private static final Map<String, Emoji> EMOJIS_BY_ALIAS =
-            new HashMap<String, Emoji>();
-    private static final Map<String, Set<Emoji>> EMOJIS_BY_TAG =
-            new HashMap<String, Set<Emoji>>();
+    private static final String PATH = "/emoji-list.json";
+    private static final Map<String, Emoji> EMOJIS_BY_ALIAS = new HashMap<>();
+    private static final Map<String, Set<Emoji>> EMOJIS_BY_TAG = new HashMap<>();
+    private static final Map<EmojiCategory, Set<Emoji>> EMOJIS_BY_CATEGORY = new HashMap<>();
     private static final List<Emoji> ALL_EMOJIS;
 
     static {
-        try {
-            InputStream stream = EmojiLoader.class.getResourceAsStream(PATH);
+        System.getProperties().setProperty("file-encoding", "UTF-8");
+        try (InputStream stream = EmojiLoader.class.getResourceAsStream(PATH)) {
             List<Emoji> emojis = EmojiLoader.loadEmojis(stream);
             ALL_EMOJIS = emojis;
             for (Emoji emoji : emojis) {
+                Set<Emoji> set = EMOJIS_BY_CATEGORY.computeIfAbsent(emoji.getCategory(), k -> new HashSet<>());
+                set.add(emoji);
+
                 for (String tag : emoji.getTags()) {
-                    if (EMOJIS_BY_TAG.get(tag) == null) {
-                        EMOJIS_BY_TAG.put(tag, new HashSet<Emoji>());
-                    }
-                    EMOJIS_BY_TAG.get(tag).add(emoji);
+                    set = EMOJIS_BY_TAG.computeIfAbsent(tag, k -> new HashSet<>());
+                    set.add(emoji);
                 }
+
                 for (String alias : emoji.getAliases()) {
                     EMOJIS_BY_ALIAS.put(alias, emoji);
                 }
             }
 
             EMOJI_TRIE = new EmojiTrie(emojis);
-            Collections.sort(ALL_EMOJIS, new Comparator<Emoji>() {
-                public int compare(Emoji e1, Emoji e2) {
-                    return e2.getUnicode().length() - e1.getUnicode().length();
-                }
-            });
-            stream.close();
+            ALL_EMOJIS.sort((e1, e2) -> e2.getUnicode().length() - e1.getUnicode().length());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new UncheckedIOException(e);
         }
     }
 
@@ -65,6 +62,14 @@ public class EmojiManager {
             return null;
         }
         return EMOJIS_BY_TAG.get(tag);
+    }
+
+    public static Set<Emoji> getForCategory(EmojiCategory category) {
+        if (category == null) {
+            return null;
+        }
+
+        return EMOJIS_BY_CATEGORY.get(category);
     }
 
     /**
