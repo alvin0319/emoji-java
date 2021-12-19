@@ -1,5 +1,8 @@
 package com.vdurmont.emoji;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
@@ -19,7 +22,6 @@ public class EmojiManager {
     private static final List<Emoji> ALL_EMOJIS;
 
     static {
-        System.getProperties().setProperty("file-encoding", "UTF-8");
         try (InputStream stream = EmojiLoader.class.getResourceAsStream(PATH)) {
             List<Emoji> emojis = EmojiLoader.loadEmojis(stream);
             ALL_EMOJIS = emojis;
@@ -28,12 +30,12 @@ public class EmojiManager {
                 set.add(emoji);
 
                 for (String tag : emoji.getTags()) {
-                    set = EMOJIS_BY_TAG.computeIfAbsent(tag, k -> new HashSet<>());
+                    set = EMOJIS_BY_TAG.computeIfAbsent(tag.toLowerCase(Locale.ROOT), k -> new HashSet<>());
                     set.add(emoji);
                 }
 
                 for (String alias : emoji.getAliases()) {
-                    EMOJIS_BY_ALIAS.put(alias, emoji);
+                    EMOJIS_BY_ALIAS.put(alias.toLowerCase(Locale.ROOT), emoji);
                 }
             }
 
@@ -51,39 +53,58 @@ public class EmojiManager {
     }
 
     /**
-     * Returns all the {@link com.vdurmont.emoji.Emoji}s for a given tag.
+     * Returns all the {@link com.vdurmont.emoji.Emoji Emojis} for a given tag.
      *
-     * @param tag the tag
-     * @return the associated {@link com.vdurmont.emoji.Emoji}s, null if the tag
-     * is unknown
+     * @param  tag
+     *         the tag
+     *
+     * @return {@link Set} of {@link com.vdurmont.emoji.Emoji Emojis}, empty set if the tag is unknown
+     *
+     * @see    #getAllTags()
      */
-    public static Set<Emoji> getForTag(String tag) {
+    @NotNull
+    public static Set<Emoji> getForTag(@NotNull String tag) {
         if (tag == null) {
-            return null;
+            return Collections.emptySet();
         }
-        return EMOJIS_BY_TAG.get(tag);
+
+        Set<Emoji> emojis = EMOJIS_BY_TAG.get(tag.toLowerCase(Locale.ROOT));
+        return emojis == null ? Collections.emptySet() : emojis;
     }
 
-    public static Set<Emoji> getForCategory(EmojiCategory category) {
+    /**
+     * Returns all the {@link com.vdurmont.emoji.Emoji Emojis} for a given category.
+     *
+     * @param  category
+     *         the {@link EmojiCategory}
+     *
+     * @return {@link Set} of {@link com.vdurmont.emoji.Emoji Emojis}, empty set if the category is unknown or null
+     */
+    @NotNull
+    public static Set<Emoji> getForCategory(@NotNull EmojiCategory category) {
         if (category == null) {
-            return null;
+            return Collections.emptySet();
         }
 
-        return EMOJIS_BY_CATEGORY.get(category);
+        Set<Emoji> emojis = EMOJIS_BY_CATEGORY.get(category);
+        return emojis == null ? Collections.emptySet() : emojis;
     }
 
     /**
      * Returns the {@link com.vdurmont.emoji.Emoji} for a given alias.
      *
-     * @param alias the alias
-     * @return the associated {@link com.vdurmont.emoji.Emoji}, null if the alias
-     * is unknown
+     * @param  alias
+     *         the alias
+     *
+     * @return The associated {@link com.vdurmont.emoji.Emoji}, null if the alias is unknown
      */
-    public static Emoji getForAlias(String alias) {
+    @Nullable
+    public static Emoji getForAlias(@NotNull String alias) {
         if (alias == null || alias.isEmpty()) {
             return null;
         }
-        return EMOJIS_BY_ALIAS.get(trimAlias(alias));
+
+        return EMOJIS_BY_ALIAS.get(trimAlias(alias).toLowerCase(Locale.ROOT));
     }
 
     private static String trimAlias(String alias) {
@@ -97,33 +118,39 @@ public class EmojiManager {
     /**
      * Returns the {@link com.vdurmont.emoji.Emoji} for a given unicode.
      *
-     * @param unicode the the unicode
-     * @return the associated {@link com.vdurmont.emoji.Emoji}, null if the
-     * unicode is unknown
+     * @param  unicode
+     *         the unicode
+     *
+     * @return The associated {@link com.vdurmont.emoji.Emoji}, null if the unicode is unknown
      */
-    public static Emoji getByUnicode(String unicode) {
+    @Nullable
+    public static Emoji getByUnicode(@NotNull String unicode) {
         if (unicode == null) {
             return null;
         }
+
         return EMOJI_TRIE.getEmoji(unicode);
     }
 
     /**
-     * Returns all the {@link com.vdurmont.emoji.Emoji}s
+     * Returns all the {@link com.vdurmont.emoji.Emoji Emojis}
      *
-     * @return all the {@link com.vdurmont.emoji.Emoji}s
+     * @return Immutable list of all the {@link com.vdurmont.emoji.Emoji Emojis}
      */
-    public static Collection<Emoji> getAll() {
+    @NotNull
+    public static List<Emoji> getAll() {
         return ALL_EMOJIS;
     }
 
     /**
      * Tests if a given String is an emoji.
      *
-     * @param string the string to test
-     * @return true if the string is an emoji's unicode, false else
+     * @param  string
+     *         the string to test
+     *
+     * @return true, if the string is an emoji's unicode, false otherwise
      */
-    public static boolean isEmoji(String string) {
+    public static boolean isEmoji(@NotNull String string) {
         if (string == null) return false;
 
         EmojiParser.UnicodeCandidate unicodeCandidate = EmojiParser.getNextUnicodeCandidate(string.toCharArray(), 0);
@@ -135,10 +162,12 @@ public class EmojiManager {
     /**
      * Tests if a given String contains an emoji.
      *
-     * @param string the string to test
-     * @return true if the string contains an emoji's unicode, false otherwise
+     * @param  string
+     *         the string to test
+     *
+     * @return true, if the string contains an emoji's unicode, false otherwise
      */
-    public static boolean containsEmoji(String string) {
+    public static boolean containsEmoji(@NotNull String string) {
         if (string == null) return false;
 
         return EmojiParser.getNextUnicodeCandidate(string.toCharArray(), 0) != null;
@@ -147,39 +176,40 @@ public class EmojiManager {
     /**
      * Tests if a given String only contains emojis.
      *
-     * @param string the string to test
-     * @return true if the string only contains emojis, false else
+     * @param  string
+     *         the string to test
+     *
+     * @return true, if the string only contains emojis, false otherwise
      */
-    public static boolean isOnlyEmojis(String string) {
+    public static boolean isOnlyEmojis(@NotNull String string) {
         return string != null && EmojiParser.removeAllEmojis(string).isEmpty();
     }
 
     /**
      * Checks if sequence of chars contain an emoji.
      *
-     * @param sequence Sequence of char that may contain emoji in full or
-     *                 partially.
-     * @return &lt;li&gt;
-     * Matches.EXACTLY if char sequence in its entirety is an emoji
-     * &lt;/li&gt;
-     * &lt;li&gt;
-     * Matches.POSSIBLY if char sequence matches prefix of an emoji
-     * &lt;/li&gt;
-     * &lt;li&gt;
-     * Matches.IMPOSSIBLE if char sequence matches no emoji or prefix of an
-     * emoji
-     * &lt;/li&gt;
+     * @param sequence
+     *       Sequence of char that may contain emoji in full or partially.
+     *
+     * @return
+     * <ul>
+     *   <li>{@link EmojiTrie.Matches#EXACTLY} if char sequence in its entirety is an emoji </li>
+     *   <li>{@link EmojiTrie.Matches#POSSIBLY} if char sequence matches prefix of an emoji</li>
+     *   <li>{@link EmojiTrie.Matches#IMPOSSIBLE} if char sequence matches no emoji or prefix of an emoji</li>
+     * </ul>
      */
-    public static EmojiTrie.Matches isEmoji(char[] sequence) {
+    @NotNull
+    public static EmojiTrie.Matches isEmoji(@NotNull char[] sequence) {
         return EMOJI_TRIE.isEmoji(sequence);
     }
 
     /**
      * Returns all the tags in the database
      *
-     * @return the tags
+     * @return Immutable {@link Set} of known tags
      */
-    public static Collection<String> getAllTags() {
-        return EMOJIS_BY_TAG.keySet();
+    @NotNull
+    public static Set<String> getAllTags() {
+        return Collections.unmodifiableSet(EMOJIS_BY_TAG.keySet());
     }
 }

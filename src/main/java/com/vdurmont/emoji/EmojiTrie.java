@@ -1,5 +1,7 @@
 package com.vdurmont.emoji;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,6 +44,7 @@ public class EmojiTrie {
      * emoji
      * &lt;/li&gt;
      */
+    @NotNull
     public Matches isEmoji(char[] sequence) {
         return isEmoji(sequence, 0, sequence.length);
     }
@@ -51,6 +54,7 @@ public class EmojiTrie {
      *
      * @see #isEmoji(char[])
      */
+    @NotNull
     public Matches isEmoji(char[] sequence, int start, int end) {
         if (start < 0 || start > end || end > sequence.length) {
             throw new ArrayIndexOutOfBoundsException(

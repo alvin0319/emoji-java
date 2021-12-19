@@ -1,5 +1,8 @@
 package com.vdurmont.emoji;
 
+/**
+ * Enum representation of the category for this emoji
+ */
 public enum EmojiCategory {
     ACTIVITY("Activities"),
     FLAGS("Flags"),
@@ -18,6 +21,14 @@ public enum EmojiCategory {
         this.displayName = displayName;
     }
 
+    /**
+     * Parses the given string to the respective category constant
+     *
+     * @param  str
+     *         The display string
+     *
+     * @return The category or {@link #UNKNOWN}
+     */
     public static EmojiCategory fromString(String str) {
         for (EmojiCategory category : values()) {
             if (category.displayName.equalsIgnoreCase(str))
@@ -27,6 +38,11 @@ public enum EmojiCategory {
         return UNKNOWN;
     }
 
+    /**
+     * The display name of this category
+     *
+     * @return The display name
+     */
     public String getDisplayName() {
         return displayName;
     }

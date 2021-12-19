@@ -1,13 +1,16 @@
 package com.vdurmont.emoji;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 /**
- * This class represents an emoji.<br>
- * <br>
- * This object is immutable so it can be used safely in a multithreaded context.
+ * This class represents an emoji.
+ *
+ * <p>This object is immutable, so it can be used safely in a multi-threaded context.
  *
  * @author Vincent DURMONT [vdurmont@gmail.com]
  */
@@ -24,12 +27,18 @@ public class Emoji {
     /**
      * Constructor for the Emoji.
      *
-     * @param description         The description of the emoji
-     * @param supportsFitzpatrick Whether the emoji supports Fitzpatrick modifiers
-     * @param category            The emoji category
-     * @param aliases             the aliases for this emoji
-     * @param tags                the tags associated with this emoji
-     * @param bytes               the bytes that represent the emoji
+     * @param description
+     *        The description of the emoji
+     * @param supportsFitzpatrick
+     *        Whether the emoji supports Fitzpatrick modifiers
+     * @param category
+     *        The emoji category
+     * @param aliases
+     *        The aliases for this emoji
+     * @param tags
+     *        The tags associated with this emoji
+     * @param bytes
+     *        The bytes that represent the emoji
      */
     protected Emoji(
             String description,
@@ -59,21 +68,8 @@ public class Emoji {
 
             offset += Character.charCount(codePoint);
         }
-        this.htmlDec = stringJoin(pointCodes, count);
-        this.htmlHex = stringJoin(pointCodesHex, count);
-    }
-
-    /**
-     * Method to replace String.join, since it was only introduced in java8
-     *
-     * @param array the array to be concatenated
-     * @return concatenated String
-     */
-    private String stringJoin(String[] array, int count) {
-        StringBuilder joined = new StringBuilder();
-        for (int i = 0; i < count; i++)
-            joined.append(array[i]);
-        return joined.toString();
+        this.htmlDec = String.join("", Arrays.copyOf(pointCodes, count));
+        this.htmlHex = String.join("", Arrays.copyOf(pointCodesHex, count));
     }
 
     /**
@@ -81,12 +77,13 @@ public class Emoji {
      *
      * @return the description
      */
+    @NotNull
     public String getDescription() {
         return this.description;
     }
 
     /**
-     * Returns wether the emoji supports the Fitzpatrick modifiers or not
+     * Returns whether the emoji supports the Fitzpatrick modifiers or not
      *
      * @return true if the emoji supports the Fitzpatrick modifiers
      */
@@ -97,8 +94,9 @@ public class Emoji {
     /**
      * Returns the aliases of the emoji
      *
-     * @return the aliases (unmodifiable)
+     * @return Immutable list of aliases
      */
+    @NotNull
     public List<String> getAliases() {
         return this.aliases;
     }
@@ -106,8 +104,9 @@ public class Emoji {
     /**
      * Returns the tags of the emoji
      *
-     * @return the tags (unmodifiable)
+     * @return Immutable list if tags
      */
+    @NotNull
     public List<String> getTags() {
         return this.tags;
     }
@@ -117,31 +116,37 @@ public class Emoji {
      *
      * @return the unicode representation
      */
+    @NotNull
     public String getUnicode() {
         return this.unicode;
     }
 
+    /**
+     * Returns the {@link EmojiCategory} for this emoji
+     *
+     * @return The {@link EmojiCategory}
+     */
+    @NotNull
     public EmojiCategory getCategory() {
         return category;
     }
 
     /**
-     * Returns the unicode representation of the emoji associated with the
-     * provided Fitzpatrick modifier.<br>
-     * If the modifier is null, then the result is similar to
-     * {@link Emoji#getUnicode()}
+     * Returns the unicode representation of the emoji associated with the provided Fitzpatrick modifier.
+     * <br>If the modifier is null, then the result is similar to {@link Emoji#getUnicode()}.
      *
-     * @param fitzpatrick the fitzpatrick modifier or null
+     * @param  fitzpatrick
+     *         the fitzpatrick modifier or null
+     *
+     * @throws IllegalStateException
+     *         if the emoji doesn't support the Fitzpatrick modifiers
+     *
      * @return the unicode representation
-     * @throws UnsupportedOperationException if the emoji doesn't support the
-     *                                       Fitzpatrick modifiers
      */
+    @NotNull
     public String getUnicode(Fitzpatrick fitzpatrick) {
         if (!this.supportsFitzpatrick()) {
-            throw new UnsupportedOperationException(
-                    "Cannot get the unicode with a fitzpatrick modifier, " +
-                            "the emoji doesn't support fitzpatrick."
-            );
+            throw new IllegalStateException("Cannot get the unicode with a fitzpatrick modifier, the emoji doesn't support fitzpatrick.");
         } else if (fitzpatrick == null) {
             return this.getUnicode();
         }
@@ -153,17 +158,9 @@ public class Emoji {
      *
      * @return the HTML decimal representation
      */
+    @NotNull
     public String getHtmlDecimal() {
         return this.htmlDec;
-    }
-
-    /**
-     * @return the HTML hexadecimal representation
-     * @deprecated identical to {@link #getHtmlHexadecimal()} for
-     * backwards-compatibility. Use that instead.
-     */
-    public String getHtmlHexidecimal() {
-        return this.getHtmlHexadecimal();
     }
 
     /**
@@ -171,6 +168,7 @@ public class Emoji {
      *
      * @return the HTML hexadecimal representation
      */
+    @NotNull
     public String getHtmlHexadecimal() {
         return this.htmlHex;
     }
@@ -187,10 +185,11 @@ public class Emoji {
     }
 
     /**
-     * Returns the String representation of the Emoji object.<br>
-     * <br>
-     * Example:<br>
-     * <code>Emoji {
+     * Returns the String representation of the Emoji object.
+     *
+     * <h2>Example</h2>
+     *
+     * <pre>{@code Emoji {
      * description='smiling face with open mouth and smiling eyes',
      * supportsFitzpatrick=false,
      * aliases=[smile],
@@ -199,11 +198,12 @@ public class Emoji {
      * unicode='😄',
      * htmlDec='&amp;#128516;',
      * htmlHex='&amp;#x1f604;'
-     * }</code>
+     * }}</pre>
      *
      * @return the string representation
      */
     @Override
+    @NotNull
     public String toString() {
         return "Emoji{" +
                 "description='" + description + '\'' +
@@ -214,6 +214,6 @@ public class Emoji {
                 ", unicode='" + unicode + '\'' +
                 ", htmlDec='" + htmlDec + '\'' +
                 ", htmlHex='" + htmlHex + '\'' +
-                '}';
+        '}';
     }
 }
