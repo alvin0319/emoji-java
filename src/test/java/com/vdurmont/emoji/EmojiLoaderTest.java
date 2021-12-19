@@ -55,22 +55,6 @@ public class EmojiLoaderTest {
   }
 
   @Test
-  public void buildEmojiFromJSON_without_description_sets_a_null_description() {
-    // GIVEN
-    JSONObject json = new JSONObject("{"
-      + "\"emoji\": \"😄\","
-      + "\"aliases\": [\"smile\"],"
-      + "\"tags\": [\"happy\", \"joy\", \"pleased\"]"
-      + "}");
-
-    // WHEN
-    Emoji emoji = EmojiLoader.buildEmojiFromJSON(json);
-
-    // THEN
-    assertNotNull(emoji);
-  }
-
-  @Test
   public void buildEmojiFromJSON_without_unicode_returns_null() {
     // GIVEN
     JSONObject json = new JSONObject("{"
@@ -111,7 +95,7 @@ public class EmojiLoaderTest {
     JSONObject json = new JSONObject("{"
       + "\"emoji\": \"\uD83D\uDC66\","
       + "\"description\": \"boy\","
-      + "\"supports_fitzpatrick\": true,"
+      + "\"skin_tones\": true,"
       + "\"aliases\": [\"boy\"],"
       + "\"tags\": [\"child\"]"
       + "}");
@@ -130,7 +114,7 @@ public class EmojiLoaderTest {
     JSONObject json = new JSONObject("{"
       + "\"emoji\": \"\uD83D\uDE15\","
       + "\"description\": \"confused face\","
-      + "\"supports_fitzpatrick\": false,"
+      + "\"skin_tones\": false,"
       + "\"aliases\": [\"confused\"],"
       + "\"tags\": []"
       + "}");
