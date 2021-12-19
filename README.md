@@ -30,7 +30,6 @@ Add jitpack
 </repository>
 ```
 
-You can also download the project, build it with `./gradlew shadowJar` and add the generated jar to your buildpath.
 
 ##### Via Gradle:
 
@@ -50,8 +49,7 @@ repositories {
 
 ##### Via Direct Download:
 
-- Use [releases](https://github.com/vdurmont/emoji-java/releases) tab to download the jar directly.
-- Download JSON-java dependency from http://mvnrepository.com/artifact/org.json/json.
+You can also download the project, build it with `./gradlew shadowJar` and add the generated jar from `build/libs` to your buildpath.
 
 ## How to use it?
 
