@@ -1,6 +1,7 @@
 package com.vdurmont.emoji;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -17,10 +18,12 @@ import java.util.List;
 public class Emoji {
     private final String description;
     private final boolean supportsFitzpatrick;
+    private final boolean hasVariation;
     private final List<String> aliases;
     private final List<String> tags;
     private final EmojiCategory category;
     private final String unicode;
+    private final String trimmedUnicode;
     private final String htmlDec;
     private final String htmlHex;
 
@@ -70,6 +73,8 @@ public class Emoji {
         }
         this.htmlDec = String.join("", Arrays.copyOf(pointCodes, count));
         this.htmlHex = String.join("", Arrays.copyOf(pointCodesHex, count));
+        this.hasVariation = unicode.contains("\uFE0F");
+        this.trimmedUnicode = hasVariation ? unicode.replace("\uFE0F", "") : unicode;
     }
 
     /**
@@ -89,6 +94,15 @@ public class Emoji {
      */
     public boolean supportsFitzpatrick() {
         return this.supportsFitzpatrick;
+    }
+
+    /**
+     * Returns whether the emoji supports a variation selection modifier or not
+     *
+     * @return true, if the emoji supports variation selector
+     */
+    public boolean supportsVariation() {
+        return hasVariation;
     }
 
     /**
@@ -122,6 +136,16 @@ public class Emoji {
     }
 
     /**
+     * Returns the unicode representation of the emoji without the variation selector
+     *
+     * @return the unicode representation without variation selector
+     */
+    @NotNull
+    public String getTrimmedUnicode() {
+        return trimmedUnicode;
+    }
+
+    /**
      * Returns the {@link EmojiCategory} for this emoji
      *
      * @return The {@link EmojiCategory}
@@ -144,13 +168,35 @@ public class Emoji {
      * @return the unicode representation
      */
     @NotNull
-    public String getUnicode(Fitzpatrick fitzpatrick) {
+    public String getUnicode(@Nullable Fitzpatrick fitzpatrick) {
         if (!this.supportsFitzpatrick()) {
             throw new IllegalStateException("Cannot get the unicode with a fitzpatrick modifier, the emoji doesn't support fitzpatrick.");
         } else if (fitzpatrick == null) {
             return this.getUnicode();
         }
         return this.getUnicode() + fitzpatrick.unicode;
+    }
+
+    /**
+     * Returns the unicode representation of the emoji associated with the provided Fitzpatrick modifier.
+     * <br>If the modifier is null, then the result is similar to {@link Emoji#getTrimmedUnicode()}.
+     *
+     * @param  fitzpatrick
+     *         the fitzpatrick modifier or null
+     *
+     * @throws IllegalStateException
+     *         if the emoji doesn't support the Fitzpatrick modifiers
+     *
+     * @return the unicode representation
+     */
+    @NotNull
+    public String getTrimmedUnicode(@Nullable Fitzpatrick fitzpatrick) {
+        if (!this.supportsFitzpatrick()) {
+            throw new IllegalStateException("Cannot get the unicode with a fitzpatrick modifier, the emoji doesn't support fitzpatrick.");
+        } else if (fitzpatrick == null) {
+            return this.getTrimmedUnicode();
+        }
+        return this.getTrimmedUnicode() + fitzpatrick.unicode;
     }
 
     /**

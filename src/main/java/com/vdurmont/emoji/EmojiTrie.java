@@ -16,16 +16,26 @@ public class EmojiTrie {
         for (Emoji emoji : emojis) {
             Node tree = root;
             char[] chars = emoji.getUnicode().toCharArray();
-            maxDepth = Math.max(maxDepth, chars.length);
-            for (char c : chars) {
-                if (!tree.hasChild(c)) {
-                    tree.addChild(c);
-                }
-                tree = tree.getChild(c);
+            maxDepth = addEmoji(maxDepth, emoji, tree, chars);
+            // Add emoji without variation selector as well
+            if (emoji.supportsVariation()) {
+                chars = emoji.getTrimmedUnicode().toCharArray();
+                maxDepth = addEmoji(maxDepth, emoji, tree, chars);
             }
-            tree.setEmoji(emoji);
         }
         this.maxDepth = maxDepth;
+    }
+
+    private int addEmoji(int maxDepth, Emoji emoji, Node tree, char[] chars) {
+        maxDepth = Math.max(maxDepth, chars.length);
+        for (char c : chars) {
+            if (!tree.hasChild(c)) {
+                tree.addChild(c);
+            }
+            tree = tree.getChild(c);
+        }
+        tree.setEmoji(emoji);
+        return maxDepth;
     }
 
 

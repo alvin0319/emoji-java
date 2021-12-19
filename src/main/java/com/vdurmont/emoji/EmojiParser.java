@@ -419,9 +419,17 @@ public class EmojiParser {
         List<String> result = new ArrayList<>();
         for (UnicodeCandidate emoji : emojis) {
             if (emoji.getEmoji().supportsFitzpatrick() && emoji.hasFitzpatrick()) {
-                result.add(emoji.getEmoji().getUnicode(emoji.getFitzpatrick()));
+                if (emoji.hasVariation()) {
+                    result.add(emoji.getEmoji().getUnicode(emoji.getFitzpatrick()));
+                } else {
+                    result.add(emoji.getEmoji().getTrimmedUnicode(emoji.getFitzpatrick()));
+                }
             } else {
-                result.add(emoji.getEmoji().getUnicode());
+                if (emoji.hasVariation()) {
+                    result.add(emoji.getEmoji().getUnicode());
+                } else {
+                    result.add(emoji.getEmoji().getTrimmedUnicode());
+                }
             }
         }
         return result;
@@ -469,13 +477,15 @@ public class EmojiParser {
             int emojiEnd = getEmojiEndPos(chars, i);
 
             if (emojiEnd != -1) {
-                Emoji emoji = EmojiManager.getByUnicode(new String(chars, i, emojiEnd - i));
+                String unicode = new String(chars, i, emojiEnd - i);
+                Emoji emoji = EmojiManager.getByUnicode(unicode);
                 String fitzpatrickString = (emojiEnd + 2 <= chars.length) ?
                         new String(chars, emojiEnd, 2) :
                         null;
                 return new UnicodeCandidate(
                         emoji,
                         fitzpatrickString,
+                        unicode.contains("\uFE0F"),
                         i
                 );
             }
@@ -546,10 +556,12 @@ public class EmojiParser {
         private final Emoji emoji;
         private final Fitzpatrick fitzpatrick;
         private final int startIndex;
+        private final boolean hasVariation;
 
-        private UnicodeCandidate(Emoji emoji, String fitzpatrick, int startIndex) {
+        private UnicodeCandidate(Emoji emoji, String fitzpatrick, boolean hasVariation, int startIndex) {
             this.emoji = emoji;
             this.fitzpatrick = Fitzpatrick.fitzpatrickFromUnicode(fitzpatrick);
+            this.hasVariation = hasVariation;
             this.startIndex = startIndex;
         }
 
@@ -559,6 +571,10 @@ public class EmojiParser {
 
         public boolean hasFitzpatrick() {
             return getFitzpatrick() != null;
+        }
+
+        public boolean hasVariation() {
+            return hasVariation;
         }
 
         public Fitzpatrick getFitzpatrick() {
