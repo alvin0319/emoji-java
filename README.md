@@ -6,6 +6,8 @@ _The missing emoji library for java._
 
 **emoji-java** is a lightweight java library that helps you use Emojis in your java applications.
 
+Documentation is hosted on [GitHub Pages](https://minndevelopment.github.io/emoji-java/com/vdurmont/emoji/overview-tree.html)
+
 ## How to get it?
 
 ##### Via Maven:
