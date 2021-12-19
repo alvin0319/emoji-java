@@ -18,12 +18,32 @@ _The missing emoji library for java._
 </dependency>
 ```
 
+Add jitpack
+
+```xml
+<repository>
+    <id>jitpack</id>
+    <name>jitpack</name>
+    <url>https://jitpack.io/</url>
+</repository>
+```
+
 You can also download the project, build it with `./gradlew shadowJar` and add the generated jar to your buildpath.
 
 ##### Via Gradle:
 
 ```gradle
-compile 'com.github.minndevelopment:emoji-java:master-SNAPSHOT'
+dependencies {
+    implementation("com.github.minndevelopment:emoji-java:master-SNAPSHOT")
+}
+```
+
+Add jitpack:
+
+```gradle
+repositories {
+    maven { url 'https://jitpack.io/' }
+}
 ```
 
 ##### Via Direct Download:
