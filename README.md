@@ -224,3 +224,10 @@ You can search a string of mixed emoji/non-emoji characters and have all of the 
 
 The emoji lists have been taken from [kcthota/emoji4j](https://github.com/kcthota/emoji4j) and [Emzi0767/discord-emoji](https://gitlab.emzi0767.dev/Emzi0767/discord-emoji).
 
+### License
+
+This also includes the licensing for each list:
+
+- kcthota/emoji4j which is licensed under [Apache 2.0](https://github.com/kcthota/emoji4j/blob/master/LICENSE)
+- Emzi0767/discord-emoji which is licensed under [AGPLv3](https://gitlab.emzi0767.dev/Emzi0767/discord-emoji/-/blob/master/COPYING)
+- vdurmont/emoji-java which is licensed under [MIT](https://github.com/MinnDevelopment/emoji-java/blob/master/LICENSE.md)
