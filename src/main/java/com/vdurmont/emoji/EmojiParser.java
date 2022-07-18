@@ -402,6 +402,10 @@ public class EmojiParser {
             prev = candidate.getFitzpatrickEndIndex();
         }
 
+        if (prev > input.length()) {
+            prev = input.length();
+        }
+
         return sb.append(input.substring(prev)).toString();
     }
 
